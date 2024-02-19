@@ -1,9 +1,9 @@
 import styles from './contact-list.module.css';
 
 const ContactList = ({ items, deleteContact }) => {
-  const elements = items.map(({ id, name, number }) => (
+  const elements = items.map(({ id, name, phone }) => (
     <li className={styles.contactItem} key={id}>
-      {name}: {number}
+      {name}: {phone}
       <button onClick={() => deleteContact(id)} type="button">
         Delete
       </button>

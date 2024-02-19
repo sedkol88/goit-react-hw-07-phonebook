@@ -1,20 +1,31 @@
-export const getAllContacts = store => store.contacts;
+import { createSelector } from '@reduxjs/toolkit';
 
-export const getFavoriteContacts = store => {
-  return store.contacts.filter(({ favorite }) => favorite);
-};
+export const selectAllContacts = store => store.contacts.items;
 
-export const getFilteredContacts = store => {
+export const selectFavoriteContacts = createSelector(
+  [selectAllContacts],
+  contacts => contacts.filter(({ favorite }) => favorite)
+);
+
+export const selectContacts = state => state.contacts;
+
+export const selectFilteredContacts = store => {
   const { contacts, filter } = store;
+  const { items } = contacts;
   if (!filter) {
-    return contacts;
+    return items;
   }
 
   const normalizedFilter = filter.toLowerCase();
 
-  const filteredContacts = contacts.filter(({ name }) => {
+  const filteredContacts = items.filter(({ name, phone }) => {
     const normalizedName = name.toLowerCase();
-    return normalizedName.includes(normalizedFilter);
+    const normalizedPhone = phone.toLowerCase();
+
+    return (
+      normalizedPhone.includes(normalizedFilter) ||
+      normalizedName.includes(normalizedFilter)
+    );
   });
 
   return filteredContacts;
